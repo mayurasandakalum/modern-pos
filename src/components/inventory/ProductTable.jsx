@@ -15,7 +15,8 @@ export function ProductTable({ onEdit }) {
                     <thead className="bg-slate-50/50 text-xs uppercase text-slate-500 font-medium">
                         <tr>
                             <th className="px-6 py-4">Product</th>
-                            <th className="px-6 py-4">SKU</th>
+                            <th className="px-6 py-4">Brand</th>
+                            <th className="px-6 py-4">SKU / Barcode</th>
                             <th className="px-6 py-4">Category</th>
                             <th className="px-6 py-4">Price</th>
                             <th className="px-6 py-4">Stock</th>
@@ -33,7 +34,17 @@ export function ProductTable({ onEdit }) {
                                         <span className="font-medium text-slate-800">{product.name}</span>
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 font-mono text-xs text-slate-500">{product.sku}</td>
+                                <td className="px-6 py-4 text-sm text-slate-600">
+                                    {product.brand || '-'}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex flex-col">
+                                        <span className="font-mono text-xs text-slate-600">{product.sku}</span>
+                                        {product.barcode && (
+                                            <span className="font-mono text-[10px] text-slate-400">{product.barcode}</span>
+                                        )}
+                                    </div>
+                                </td>
                                 <td className="px-6 py-4">
                                     <span className="px-2 py-1 rounded-full bg-slate-100 text-xs border border-slate-200 text-slate-600">
                                         {product.category}
@@ -42,7 +53,7 @@ export function ProductTable({ onEdit }) {
                                 <td className="px-6 py-4 text-slate-800 font-medium">${product.price.toFixed(2)}</td>
                                 <td className="px-6 py-4">
                                     <div className={`flex items-center gap-2 ${product.stock < 5 ? 'text-red-500' :
-                                            product.stock < 10 ? 'text-yellow-600' : 'text-green-600'
+                                        product.stock < 10 ? 'text-yellow-600' : 'text-green-600'
                                         }`}>
                                         {product.stock < 5 && <AlertCircle className="w-4 h-4" />}
                                         <span className="font-bold">{product.stock}</span>

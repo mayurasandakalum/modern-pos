@@ -8,6 +8,10 @@ export const useProductStore = create((set, get) => ({
     searchQuery: '',
     selectedCategory: 'All',
 
+    // New fields support is mainly in the data objects themselves, 
+    // but we might want to ensure we can filter/search by them if needed later.
+    // For now, the store just holds the array.
+
     fetchProducts: async () => {
         set({ isLoading: true, error: null });
         try {
@@ -25,9 +29,13 @@ export const useProductStore = create((set, get) => ({
     getFilteredProducts: () => {
         const { products, searchQuery, selectedCategory } = get();
         return products.filter(product => {
-            const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                product.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                product.barcode === searchQuery;
+            const searchLower = searchQuery.toLowerCase();
+            const matchesSearch =
+                product.name.toLowerCase().includes(searchLower) ||
+                product.sku.toLowerCase().includes(searchLower) ||
+                (product.barcode && product.barcode.includes(searchLower)) || // Added barcode search
+                (product.brand && product.brand.toLowerCase().includes(searchLower)); // Added brand search
+
             const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
 
             return matchesSearch && matchesCategory;
@@ -41,6 +49,20 @@ export const useProductStore = create((set, get) => ({
                 p.id === productId
                     ? { ...p, stock: p.stock - quantityChange }
                     : p
+            )
+        }));
+    },
+
+    addProduct: (product) => {
+        set(state => ({
+            products: [...state.products, product]
+        }));
+    },
+
+    updateProduct: (id, updates) => {
+        set(state => ({
+            products: state.products.map(p =>
+                p.id === id ? { ...p, ...updates } : p
             )
         }));
     }
