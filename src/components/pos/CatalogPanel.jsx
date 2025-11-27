@@ -3,6 +3,7 @@ import { Search, Barcode } from 'lucide-react';
 import { useProductStore } from '../../store/useProductStore';
 import { useCartStore } from '../../store/useCartStore';
 import { GlassCard } from '../shared/GlassCard';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function CatalogPanel() {
     const {
@@ -17,6 +18,7 @@ export function CatalogPanel() {
     } = useProductStore();
 
     const { addItem } = useCartStore();
+    const { t } = useLanguage();
 
     useEffect(() => {
         fetchProducts();
@@ -33,7 +35,7 @@ export function CatalogPanel() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
                     <input
                         type="text"
-                        placeholder="Search products or scan barcode..."
+                        placeholder={t('catalog.searchPlaceholder')}
                         className="w-full bg-white/50 border border-slate-200 rounded-lg pl-10 pr-4 py-3 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -49,8 +51,8 @@ export function CatalogPanel() {
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
                         className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === cat
-                                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
-                                : 'bg-white/50 text-slate-600 hover:bg-white/80 border border-transparent hover:border-slate-200'
+                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
+                            : 'bg-white/50 text-slate-600 hover:bg-white/80 border border-transparent hover:border-slate-200'
                             }`}
                     >
                         {cat}
@@ -61,7 +63,7 @@ export function CatalogPanel() {
             {/* Product Grid */}
             <div className="flex-1 overflow-y-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pr-2 custom-scrollbar">
                 {isLoading ? (
-                    <div className="col-span-full text-center text-slate-400 py-10">Loading inventory...</div>
+                    <div className="col-span-full text-center text-slate-400 py-10">{t('catalog.loading')}</div>
                 ) : filteredProducts.map(product => (
                     <button
                         key={product.id}
@@ -80,7 +82,7 @@ export function CatalogPanel() {
                                 <h3 className="font-medium text-slate-800 line-clamp-2 mb-1">{product.name}</h3>
                                 <div className="flex justify-between items-center w-full">
                                     <span className="text-blue-600 font-bold">${product.price.toFixed(2)}</span>
-                                    <span className="text-xs text-slate-500">{product.stock} in stock</span>
+                                    <span className="text-xs text-slate-500">{product.stock} {t('catalog.inStock')}</span>
                                 </div>
                             </div>
                         </GlassCard>

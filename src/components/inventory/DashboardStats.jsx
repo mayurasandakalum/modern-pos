@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { TrendingUp, AlertTriangle, Package, DollarSign } from 'lucide-react';
 import { GlassCard } from '../shared/GlassCard';
+import { useLanguage } from '../../context/LanguageContext';
 
 function AnimatedCounter({ value, prefix = '', suffix = '' }) {
     const spring = useSpring(0, { bounce: 0, duration: 2000 });
@@ -17,10 +18,11 @@ function AnimatedCounter({ value, prefix = '', suffix = '' }) {
 }
 
 export function DashboardStats() {
+    const { t } = useLanguage();
     // Mock data for stats
     const stats = [
         {
-            label: 'Total Sales Today',
+            label: t('stats.totalSales'),
             value: 1250,
             prefix: '$',
             icon: DollarSign,
@@ -28,21 +30,21 @@ export function DashboardStats() {
             bg: 'bg-green-100'
         },
         {
-            label: 'Low Stock Alerts',
+            label: t('stats.lowStock'),
             value: 3,
             icon: AlertTriangle,
             color: 'text-red-600',
             bg: 'bg-red-100'
         },
         {
-            label: 'Total Products',
+            label: t('stats.totalProducts'),
             value: 45,
             icon: Package,
             color: 'text-blue-600',
             bg: 'bg-blue-100'
         },
         {
-            label: 'Transactions',
+            label: t('stats.transactions'),
             value: 28,
             icon: TrendingUp,
             color: 'text-purple-600',

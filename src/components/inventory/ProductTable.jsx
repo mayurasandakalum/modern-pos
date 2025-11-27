@@ -2,11 +2,13 @@ import React from 'react';
 import { Edit, Trash2, AlertCircle } from 'lucide-react';
 import { GlassCard } from '../shared/GlassCard';
 import { useProductStore } from '../../store/useProductStore';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function ProductTable({ onEdit }) {
     const { products, isLoading } = useProductStore();
+    const { t } = useLanguage();
 
-    if (isLoading) return <div className="text-center text-slate-400 py-10">Loading...</div>;
+    if (isLoading) return <div className="text-center text-slate-400 py-10">{t('catalog.loading')}</div>;
 
     return (
         <GlassCard className="overflow-hidden bg-white/60">
@@ -14,13 +16,13 @@ export function ProductTable({ onEdit }) {
                 <table className="w-full text-left text-sm text-slate-600">
                     <thead className="bg-slate-50/50 text-xs uppercase text-slate-500 font-medium">
                         <tr>
-                            <th className="px-6 py-4">Product</th>
-                            <th className="px-6 py-4">Brand</th>
-                            <th className="px-6 py-4">SKU / Barcode</th>
-                            <th className="px-6 py-4">Category</th>
-                            <th className="px-6 py-4">Price</th>
-                            <th className="px-6 py-4">Stock</th>
-                            <th className="px-6 py-4 text-right">Actions</th>
+                            <th className="px-6 py-4">{t('table.product')}</th>
+                            <th className="px-6 py-4">{t('table.brand')}</th>
+                            <th className="px-6 py-4">{t('table.sku')}</th>
+                            <th className="px-6 py-4">{t('table.category')}</th>
+                            <th className="px-6 py-4">{t('table.price')}</th>
+                            <th className="px-6 py-4">{t('table.stock')}</th>
+                            <th className="px-6 py-4 text-right">{t('table.actions')}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200/50">

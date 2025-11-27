@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard } from '../shared/GlassCard';
 import { useCartStore } from '../../store/useCartStore';
 import { cartService } from '../../services/cartService';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function PaymentModal({ isOpen, onClose, total }) {
     const [paymentMethod, setPaymentMethod] = useState('Card');
     const [isProcessing, setIsProcessing] = useState(false);
     const { items, clearCart } = useCartStore();
+    const { t } = useLanguage();
 
     const handlePayment = async () => {
         setIsProcessing(true);
@@ -38,14 +40,14 @@ export function PaymentModal({ isOpen, onClose, total }) {
                 >
                     <GlassCard className="p-6 bg-white/90 border-white/50 shadow-2xl">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold text-slate-800">Payment</h2>
+                            <h2 className="text-2xl font-bold text-slate-800">{t('payment.title')}</h2>
                             <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
 
                         <div className="text-center mb-8">
-                            <div className="text-slate-500 text-sm mb-1">Total Amount</div>
+                            <div className="text-slate-500 text-sm mb-1">{t('payment.totalAmount')}</div>
                             <div className="text-4xl font-bold text-slate-800">${total.toFixed(2)}</div>
                         </div>
 
@@ -55,14 +57,14 @@ export function PaymentModal({ isOpen, onClose, total }) {
                                     key={method}
                                     onClick={() => setPaymentMethod(method)}
                                     className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all ${paymentMethod === method
-                                            ? 'bg-blue-50 border-blue-500 text-blue-600'
-                                            : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
+                                        ? 'bg-blue-50 border-blue-500 text-blue-600'
+                                        : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
                                         }`}
                                 >
                                     {method === 'Card' && <CreditCard className="w-6 h-6 mb-2" />}
                                     {method === 'Cash' && <Banknote className="w-6 h-6 mb-2" />}
                                     {method === 'Split' && <Wallet className="w-6 h-6 mb-2" />}
-                                    <span className="text-sm font-medium">{method}</span>
+                                    <span className="text-sm font-medium">{t(`payment.${method.toLowerCase()}`)}</span>
                                 </button>
                             ))}
                         </div>
@@ -72,7 +74,7 @@ export function PaymentModal({ isOpen, onClose, total }) {
                             disabled={isProcessing}
                             className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-400 hover:to-cyan-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex justify-center items-center gap-2"
                         >
-                            {isProcessing ? 'Processing...' : `Pay $${total.toFixed(2)}`}
+                            {isProcessing ? t('payment.processing') : `${t('payment.pay')} $${total.toFixed(2)}`}
                         </button>
                     </GlassCard>
                 </motion.div>
